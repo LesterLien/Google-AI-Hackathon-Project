@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "88998535706",
+    "firebase_url": "https://aihackathon-739ad-default-rtdb.firebaseio.com",
+    "project_id": "aihackathon-739ad",
+    "storage_bucket": "aihackathon-739ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88998535706:android:c07bd93275877b659527a3",
+        "android_client_info": {
+          "package_name": "com.fiveheads.hackathonproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbGaAXTJBfLVg6Wfa4oCT493Ky8eYT0Bc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
