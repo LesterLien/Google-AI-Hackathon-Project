@@ -90,4 +90,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'aihackathon-739ad.appspot.com',
     measurementId: 'G-TMEGMM203F',
   );
+
 }
