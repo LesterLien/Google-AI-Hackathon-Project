@@ -44,3 +44,6 @@ app.*.map.json
 
 #Firebase Related
 .firebaserc
+
+#Gemini Related
+flutter_dotenv.env
