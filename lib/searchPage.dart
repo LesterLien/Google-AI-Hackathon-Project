@@ -16,12 +16,6 @@ class _SearchPageState extends State<SearchPage> {
   List<Map<String, dynamic>> _searchResults = [];
   bool _isLoading = false;
 
-  void _handleSearch() {
-    if (_searchController.text.isNotEmpty) {
-      searchFood(_searchController.text);
-    }
-  }
-
   Future<void> searchFood(String query) async {
     final url = Uri.parse(
         'https://search-food-mfckn4ttpa-uc.a.run.app/searchFood?query=$query');
@@ -30,13 +24,8 @@ class _SearchPageState extends State<SearchPage> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        // Filter out items with missing or empty fdcId and unknown brands
         _searchResults = List<Map<String, dynamic>>.from(
-            data.where((item) => 
-                item['fdcId'] != null && item['fdcId'] != '' &&
-                item['brandName'] != 'Unknown Brand' &&
-                item['brandOwner'] != 'Unknown Owner'
-            ).map((item) => Map<String, dynamic>.from(item)));
+            data.map((item) => Map<String, dynamic>.from(item)));
       } else {
         throw Exception('Failed to load data');
       }
@@ -48,6 +37,11 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
+  void _handleSearch() {
+    if (_searchController.text.isNotEmpty) {
+      searchFood(_searchController.text);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
