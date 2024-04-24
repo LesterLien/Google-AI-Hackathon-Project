@@ -43,21 +43,24 @@ class HomePage extends StatelessWidget {
         centerTitle: true, // Center the title
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Stretch the column horizontally
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 16, right: 16), // Add padding around the quote
-            child: Text(
-              '"Every product holds a story. Let your purchases tell tales of compassion, sustainability, and ethical values."',
-              textAlign: TextAlign.center, // Center the quote
-              style: TextStyle(
-                fontStyle: FontStyle.italic, // Optionally, set italic style for the quote
-                fontSize: 16, // Optionally, adjust font size for the quote
-              ),
+          SizedBox(height: 10), // Add padding between title and quote
+          Text(
+            '"Every product holds a story. Let your purchases tell tales of compassion, sustainability, and ethical values."',
+            textAlign: TextAlign.center, // Center the quote
+            style: TextStyle(
+              fontStyle: FontStyle.italic, // Optionally, set italic style for the quote
+              fontSize: 12, // Optionally, adjust font size for the quote
             ),
           ),
+          SizedBox(height: 200), // Add space below the quote
           Image.network(
-              'https://via.placeholder.com/150'), // Placeholder for logo, replace with your asset
+            'https://via.placeholder.com/150',
+            height: 150, // Set height of the image
+          ),
+          SizedBox(height: 20), // Add space below the image
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -65,6 +68,7 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Start being Conscious about your Cart!'),
           ),
+          SizedBox(height: 20), // Add space below the search bar
         ],
       ),
     );
