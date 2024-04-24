@@ -36,26 +36,31 @@ def get_food_details(request: https_fn.Request) -> https_fn.Response:
     else:
         return https_fn.Response('Failed to retrieve food details', status=details_response.status_code)
 
+
+
 @https_fn.on_request()
 def search_food(request: https_fn.Request) -> https_fn.Response:
     query = request.args.get('query', '')
     api_key = 'KnbgdtX65ISaS5jKyDefHDsbrfiVOUKULfHgZMS0'
-    search_url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key={api_key}&query={query}'
+    search_url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key={api_key}&query={query}&pageSize=30'
     
     search_response = requests.get(search_url)
     if search_response.status_code == 200:
         search_data = search_response.json()
         formatted_results = [
             {
-                'brandName': item.get('brandOwner', 'Unknown Brand'),
+                'brandName': item.get('brandOwner'),
                 'description': item.get('description', 'No description available'),
-                'brandOwner': item.get('brandOwner', 'Unknown Owner'),
-                'fdcId': item.get('fdcId')  # Include the fdcId in the response
+                'brandOwner': item.get('brandOwner'),
+                'fdcId': item.get('fdcId'),  # Include the fdcId in the response
+                'gtinUpc': item.get('gtinUpc', 'No UPC available')  # Include the gtinUpc in the response
             }
-            for item in search_data.get('foods', [])[:10]
-        ]
+            for item in search_data.get('foods', [])
+            if item.get('brandOwner') and item.get('brandOwner') != 'Unknown Brand'  # Filter out unknown brands and owners
+        ][:30]  # Ensure only up to 30 items are included even if more are fetched
         return https_fn.Response(json.dumps(formatted_results), status=200, headers={'Content-Type': 'application/json'})
     else:
         return https_fn.Response('Failed to retrieve data', status=500)
+
 
 # Deploy these functions using `firebase deploy` in the Firebase CLI

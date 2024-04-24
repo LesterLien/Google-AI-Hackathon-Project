@@ -71,7 +71,17 @@ class _SearchPageState extends State<SearchPage> {
               itemCount: _searchResults.length,
               itemBuilder: (context, index) => ListTile(
                 title: Text(_searchResults[index]['brandName']),
-                subtitle: Text(_searchResults[index]['description']),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_searchResults[index]['description']),
+                    Text('UPC: ${_searchResults[index]['gtinUpc']}',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color:
+                                Colors.grey)) // Displaying UPC in smaller text
+                  ],
+                ),
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
