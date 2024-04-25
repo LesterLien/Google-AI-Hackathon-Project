@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'searchPage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
-import 'homepage.dart';
-
+import 'main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(const MyApp2());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp2 extends StatelessWidget {
+  const MyApp2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const HomePage(),
+      home: const newHome(),
       routes: {
         '/home1': (context) => HomePage(),
         '/home2': (context) => newHome(), 
@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class newHome extends StatelessWidget {
+  const newHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +63,13 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
+
           ElevatedButton(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Login()),
-            ),
-            child: const Text('Login'),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, "/home1");
+            },
+            child: Text("Sign out"),
           ),
           SizedBox(height: 150),
           Image.network(

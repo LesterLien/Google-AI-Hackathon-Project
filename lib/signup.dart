@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hackathonproject/firebase/auth';
 import 'package:hackathonproject/form_Container_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart'; 
 import 'main.dart';
 
@@ -7,13 +9,15 @@ class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
-  SignUpState createState() => SignUpState();
+  State<SignUp> createState() => SignUpState();
 }
 
 class SignUpState extends State<SignUp> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  final FirebaseAuthService auth = FirebaseAuthService();
 
   bool isSigningUp = false;
 
@@ -111,9 +115,14 @@ class SignUpState extends State<SignUp> {
                     "Already have an account? ",
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
-                  Text(
-                    "Login",
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Login())); 
+                    },
+                    child: Text(
+                      "Login", // Change text to "Sign up"
+                      style: TextStyle(fontSize: 15, color: Colors.blue),
+                    ),
                   ),
                 ],
               ),
@@ -133,8 +142,18 @@ class SignUpState extends State<SignUp> {
     String email = emailController.text;
     String password = passwordController.text;
 
+    User? user = await auth.signUpWithEmailAndPassword(email, password);
+
     setState(() {
       isSigningUp = false;
     });
+
+    if (user != null) {
+      print("User is successfully created");
+      Navigator.pushReplacementNamed(context, "/home1");
+    } else {
+      print("Error");
+    }
   }
+  
 }

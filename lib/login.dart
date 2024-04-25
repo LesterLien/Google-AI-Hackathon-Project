@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonproject/form_Container_widget.dart';
 import 'package:hackathonproject/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hackathonproject/firebase/auth';
 import 'signup.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Login> createState() => LoginState();
 }
 
-class _LoginState extends State<Login> {
+class LoginState extends State<Login> {
   bool isSigning = false;
+  final FirebaseAuthService auth = FirebaseAuthService();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -134,8 +137,18 @@ class _LoginState extends State<Login> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    User? user = await auth.signInWithEmailAndPassword(email, password);
+
+
     setState(() {
       isSigning = false;
     });
+
+    if (user != null) {
+      print("User is successfully signed in");
+      Navigator.pushReplacementNamed(context, "/home2");
+    } else {
+      print("Error");
+    }
   }
 }
