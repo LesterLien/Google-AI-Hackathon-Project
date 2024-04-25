@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonproject/form_Container_widget.dart';
+import 'signup.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -20,94 +21,118 @@ class _LoginState extends State<Login> {
     super.dispose();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      automaticallyImplyLeading: false,
-      title: Text("Sign in"),
-    ),
-    body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 30),
-          Text(
-            "Sign In",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.orange), // Set text color to orange
-          ),
-          SizedBox(height: 30),
-          Row(
-            children: [
-              Text(
-                "Email",
-                style: TextStyle(fontSize: 15),
-              ),
-              Spacer(), // Add Spacer to push the text to the far left
-            ],
-          ),
-          FormContainerWidget(
-            controller: _emailController,
-            hintText: "Enter your email",
-            isPasswordField: false,
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              Text(
-                "Password",
-                style: TextStyle(fontSize: 15),
-              ),
-              Spacer(), // Add Spacer to push the text to the far left
-            ],
-          ),
-          FormContainerWidget(
-            controller: _passwordController,
-            hintText: "Enter your Password",
-            isPasswordField: true,
-          ),
-          SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              signIn();
-            },
-            child: Container(
-              width: 150, // Adjust width here
-              height: 40, // Adjust height here
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.orange), // Orange border
-              ),
-              child: Center(
-                child: isSigning
-                    ? CircularProgressIndicator(color: Colors.black)
-                    : Text(
-                        "Login",
-                        style: TextStyle(
-                          color: Colors.orange, // Orange text color
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text("Sign in"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 30),
+            Text(
+              "Sign In",
+              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.orange),
+            ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Text(
+                  "Email",
+                  style: TextStyle(fontSize: 15),
+                ),
+                Spacer(),
+              ],
+            ),
+            FormContainerWidget(
+              controller: _emailController,
+              hintText: "Enter your email",
+              isPasswordField: false,
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Text(
+                  "Password",
+                  style: TextStyle(fontSize: 15),
+                ),
+                Spacer(),
+              ],
+            ),
+            FormContainerWidget(
+              controller: _passwordController,
+              hintText: "Enter your Password",
+              isPasswordField: true,
+            ),
+            SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+              },
+              child: Row(
+                children: [
+                  Text(
+                    "Signup",
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                  Spacer(),
+                ],
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {
+                signIn();
+              },
+              child: Container(
+                width: 150,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.orange),
+                ),
+                child: Center(
+                  child: isSigning
+                      ? CircularProgressIndicator(color: Colors.black)
+                      : Text(
+                          "Login",
+                          style: TextStyle(
+                            color: Colors.orange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account? ",
+                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp())); // Navigate to the signup.dart file
+                  },
+                  child: Text(
+                    "Sign up", // Change text to "Sign up"
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
-
-
-
-
-
-
-
-
-
-
+    );
+  }
 
   void signIn() async {
     setState(() {
