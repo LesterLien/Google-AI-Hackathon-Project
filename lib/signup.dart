@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hackathonproject/form_Container_widget.dart';
 import 'login.dart'; 
 import 'main.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -30,6 +31,15 @@ class SignUpState extends State<SignUp> {
       appBar: AppBar(
         title: Text("Homepage"),
         automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+        ),
       ),
       body: GestureDetector(
         onTap: () => Navigator.push(
