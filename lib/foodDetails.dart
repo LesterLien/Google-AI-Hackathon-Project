@@ -1,7 +1,7 @@
-// foodDetails.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'analysisPage.dart'; // Import the AnalysisPage
 
 class FoodDetailsPage extends StatelessWidget {
   final String fdcId;
@@ -49,7 +49,8 @@ class FoodDetailsPage extends StatelessWidget {
                 ),
                 ListTile(
                   title: const Text('Category'),
-                  subtitle: Text(snapshot.data!['brandedFoodCategory'] ?? 'N/A'),
+                  subtitle:
+                      Text(snapshot.data!['brandedFoodCategory'] ?? 'N/A'),
                 ),
                 ListTile(
                   title: const Text('Package Weight'),
@@ -57,11 +58,23 @@ class FoodDetailsPage extends StatelessWidget {
                 ),
                 ListTile(
                   title: const Text('Not a Signficant Source of'),
-                  subtitle: Text(snapshot.data!['notaSignificantSourceOf'] ?? 'N/A'),
+                  subtitle:
+                      Text(snapshot.data!['notaSignificantSourceOf'] ?? 'N/A'),
                 ),
                 ListTile(
                   title: const Text('Ingredients'),
                   subtitle: Text(snapshot.data!['ingredients'] ?? 'N/A'),
+                ),
+                ElevatedButton(
+                  // Button to navigate to AnalysisPage
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AnalysisPage(fdcId: fdcId)),
+                    );
+                  },
+                  child: Text('Analyze'),
                 ),
               ],
             );
