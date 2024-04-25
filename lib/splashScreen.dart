@@ -6,10 +6,10 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, this.child});
   
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashScreen> createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
       Future.delayed(
@@ -18,8 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       );
   }
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -35,25 +35,25 @@ class HomePage extends StatelessWidget {
         title: Text(
           'Conscious Cart',
           style: TextStyle(
-            fontFamily: 'Pacifico', // Use the Pacifico font
-            fontSize: 45, // Adjust font size as needed
-            fontWeight: FontWeight.bold, // Optionally, set font weight
-            color: Theme.of(context).textTheme.headline6!.color, // Use the text color from the theme
+            fontFamily: 'Pacifico', 
+            fontSize: 45, 
+            fontWeight: FontWeight.bold, 
+            color: Colors.black, 
           ),
         ),
-        centerTitle: true, // Center the title
+        centerTitle: true, 
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 10), // Add padding between title and quote
+          SizedBox(height: 10), 
           Text(
             '"Every product holds a story. Let your purchases tell tales of compassion, sustainability, and ethical values."',
-            textAlign: TextAlign.center, // Center the quote
+            textAlign: TextAlign.center, 
             style: TextStyle(
-              fontStyle: FontStyle.italic, // Optionally, set italic style for the quote
-              fontSize: 12, // Optionally, adjust font size for the quote
+              fontStyle: FontStyle.italic,
+              fontSize: 12, 
             ),
           ),
           SizedBox(height: 20),
@@ -64,12 +64,12 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Login'),
           ),
-          SizedBox(height: 200), // Add space below the quote
+          SizedBox(height: 200),
           Image.network(
             'https://via.placeholder.com/150',
-            height: 150, // Set height of the image
+            height: 150, 
           ),
-          SizedBox(height: 20), // Add space below the image
+          SizedBox(height: 20), 
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Start being Conscious about your Cart!'),
           ),
-          SizedBox(height: 20), // Add space below the search bar
+          SizedBox(height: 20), 
         ],
       ),
     );
