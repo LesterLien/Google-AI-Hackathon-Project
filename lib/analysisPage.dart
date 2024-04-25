@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'api_keys.dart';
 
 class AnalysisPage extends StatefulWidget {
   final String fdcId;
@@ -14,7 +12,8 @@ class AnalysisPage extends StatefulWidget {
 }
 
 class _AnalysisPageState extends State<AnalysisPage> {
-  late Future<String> _analysisResult;
+  late Future<Map<String, dynamic>> _analysisResult;
+
   final String fdcId;
 
   _AnalysisPageState({required this.fdcId});
@@ -25,156 +24,78 @@ class _AnalysisPageState extends State<AnalysisPage> {
     _analysisResult = _fetchAnalysis();
   }
 
-  Future<String> _fetchAnalysis() async {
-    final String foodDetailsJson = await _fetchFoodDetails();
-    final String prompt = generatePrompt(foodDetailsJson);
-
-    final apiKey =
-        geminiApiKey; // Make sure your API key is correctly configured
-    final url = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey');
-
-    // Prepare the JSON request body with the correct configuration
-    final requestBody = jsonEncode({
-      "contents": [
-        {
-          "parts": [
-            {"text": prompt}
-          ]
-        }
-      ],
-      "generationConfig": {
-        "response_mime_type":
-            "application/json", // Requesting JSON format response
-      }
-    });
-
-    // Send the POST request to the API
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json'
-      }, // Set headers to indicate JSON content type
-      body: requestBody,
-    );
-
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
-      print('Response from model: ${response.body}');
-      return _formatAnalysis(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception(
-          'Failed to generate content with status code: ${response.statusCode}');
-    }
-  }
-
-
-  Future<String> _fetchFoodDetails() async {
-    final url = Uri.parse(
-        'https://get-food-details-mfckn4ttpa-uc.a.run.app/?fdcId=$fdcId');
+  Future<Map<String, dynamic>> _fetchAnalysis() async {
+    final uri = Uri.parse(
+        'https://generate-food-analysis-mfckn4ttpa-uc.a.run.app/generate_food_analysis?fdcId=$fdcId');
     try {
-      final response = await http.get(url);
+      final response = await http.get(uri);
       if (response.statusCode == 200) {
-        return response.body;
+        var data = jsonDecode(response.body);
+        return _parseAnalysisData(data); // Parse the data before returning
       } else {
         throw Exception(
-            'Failed to load food details (Status Code: ${response.statusCode})');
+            'Failed to load analysis (Status Code: ${response.statusCode})');
       }
     } catch (e) {
-      print('Error fetching food details: $e');
-      throw Exception('Failed to fetch food details');
+      print('Error fetching analysis: $e');
+      throw Exception('Failed to fetch analysis');
     }
   }
 
-  String _formatAnalysis(String jsonText) {
-    try {
-      final Map<String, dynamic> responseData = jsonDecode(jsonText);
-      // Assuming responseData contains a key 'candidates' which is a list
-      List candidates = responseData['candidates'];
+  Map<String, dynamic> _parseAnalysisData(Map<String, dynamic> rawData) {
+    return {
+      'Brand': rawData['Brand'],
+      'Ingredients': _parseList(rawData['Ingredients']),
+      'Potential Allergens': _parseList(rawData['Potential Allergens']),
+      'Health Evaluation': rawData['Health Evaluation'],
+      'Positives': _parseList(rawData['Positives']),
+      'Negatives': _parseList(rawData['Negatives']),
+      'Considerations': _parseList(rawData['Considerations']),
+      'Disclaimers': _parseList(rawData['Disclaimers']),
+      'Dietary Suitability':
+          _parseDietarySuitability(rawData['Dietary Suitability']),
+      'Diabetic': _parseList(rawData['Diabetic']),
+      'Overall Analysis': _parseList(rawData['Overall Analysis']),
+    };
+  }
 
-      // Since you expect only one candidate usually, we will take the first one
-      if (candidates.isNotEmpty) {
-        Map<String, dynamic> firstCandidate =
-            candidates.first['content']['parts'].first;
-        // Parse the JSON formatted string inside the 'text' key
-        String jsonContent = firstCandidate['text'];
-        // Remove the extra square brackets and newlines from the string
-        jsonContent =
-            jsonContent.trim().substring(1, jsonContent.length - 2).trim();
-        // Decode the JSON string inside
-        Map<String, dynamic> actualData = jsonDecode(jsonContent);
-
-        // Format the extracted data into a readable format or process it as needed
-        StringBuffer formatted = StringBuffer();
-        formatted.writeln('Brand: ${actualData["Brand"]}');
-        formatted.writeln('Ingredients: ${actualData["Ingredients"]}');
-        formatted.writeln(
-            'Potential Allergens: ${actualData["Potential Allergens"]}');
-        formatted.writeln('Health Evaluation:');
-        formatted.writeln(
-            '  Positives: ${actualData["Health Evaluation"]["Positives"].join(", ")}');
-        formatted.writeln(
-            '  Negatives: ${actualData["Health Evaluation"]["Negatives"].join(", ")}');
-        formatted.writeln(
-            '  Considerations: ${actualData["Health Evaluation"]["Considerations"].join(", ")}');
-        formatted.writeln('Disclaimers: ${actualData["Disclaimers"]}');
-        formatted.writeln('Dietary Suitability:');
-        formatted
-            .writeln('  Vegan: ${actualData["Dietary Suitability"]["Vegan"]}');
-        formatted.writeln(
-            '  Vegetarian: ${actualData["Dietary Suitability"]["Vegetarian"]}');
-        formatted.writeln(
-            '  Gluten-Free: ${actualData["Dietary Suitability"]["Gluten-Free"]}');
-        formatted
-            .writeln('  Keto: ${actualData["Dietary Suitability"]["Keto"]}');
-        formatted.writeln(
-            '  Diabetic: ${actualData["Dietary Suitability"]["Diabetic"]}');
-        formatted
-            .writeln('Overall Analysis: ${actualData["Overall Analysis"]}');
-
-        return formatted.toString();
-      }
-      return "No valid data found in response.";
-    } catch (e) {
-      print('Error formatting analysis: $e');
-      return 'Failed to format analysis data: $e';
+  dynamic _parseDietarySuitability(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      return {
+        'Vegan': data['Vegan'],
+        'Vegetarian': data['Vegetarian'],
+        'Gluten-Free': data['Gluten-Free'],
+        'Keto': data['Keto'],
+      };
+    } else {
+      return data; // If it's not a map, return as is
     }
   }
 
-
-
-  String generatePrompt(String foodDetails) {
-    return """
-    You are acting as a health advisor analyzing a food product. Please analyze all the provided information and return a detailed analysis in a JSON format with the following keys:
-    * **Brand**: [Brand Name]
-    * **Ingredients**: [Ingredients List]
-    * **Potential Allergens**: [List Potential Allergens, or 'None' if not apparent from ingredients]
-    * **Health Evaluation**: 
-        * **Positives**: [Highlight potential benefits.]
-        * **Negatives**: [Highlight potential drawbacks or concerns.]
-        * **Considerations**: [Additional factors to keep in mind.] 
-    * **Disclaimers**: [Include any necessary disclaimers regarding individual health or dietary restrictions.]
-    * **Dietary Suitability**: 
-        * **Vegan**: [Yes/No]
-        * **Vegetarian**: [Yes/No]
-        * **Gluten-Free**: [Yes/No - Or indicate if it cannot be determined from the provided ingredients]
-        * **Keto**: [Yes/No]
-        * **Diabetic**: [Suitable, Suitable with moderation, Not suitable - Explain briefly]
-    * **Overall Analysis**: Provide a concise two-paragraph summary. In the first paragraph, outline the product's suitability for weight management and sugar control, alongside any notable benefits. In the second paragraph, address potential health concerns, long-term effects of ingredients, and suggest healthier alternatives where relevant.  
-    Please analyze the following product:
-    $foodDetails 
-    """;
+  List<String> _parseList(dynamic data) {
+  if (data is List<dynamic>) {
+    return data.map((item) => item.toString()).toList();
+  } else if (data is String) {
+    // Strip out the "- [" at the start and "- ]" at the end if present.
+    String formattedString = data.replaceAll(RegExp(r'^\-\s*\[|\]\s*\-\s*$'), '');
+    // Now, remove square brackets if they're at the ends of the string.
+    formattedString = formattedString.replaceAll(RegExp(r'^\[|\]$'), '');
+    // Split the string by the comma, then strip each item of whitespace and quotes.
+    return formattedString.split(RegExp(r'\s*\,\s*')).map((item) => item.replaceAll(RegExp(r'^"|"$'), '')).toList();
+  } else {
+    return [data.toString()];
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analysis Page'),
+        title: Text('Food Analysis'),
       ),
-      body: FutureBuilder<String>(
+      body: FutureBuilder<Map<String, dynamic>>(
         future: _analysisResult,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -182,12 +103,47 @@ class _AnalysisPageState extends State<AnalysisPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
-            final formattedAnalysis = snapshot.data!;
+            final analysisData = snapshot.data!;
+            // Access the values from the map and display them in your UI
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
-              child: Text(
-                formattedAnalysis,
-                style: TextStyle(fontSize: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Brand: ${analysisData['Brand']}'),
+                  Text('Ingredients: ${_parseList(analysisData['Ingredients']).join(', ')}'),
+                  Text('Potential Allergens: ${_parseList(analysisData['Potential Allergens']).join(',')}'),
+                  Text('Health Evaluation:'),
+                  for (var positive in analysisData['Positives'])
+                    Text('  - $positive'),
+                  for (var negative in analysisData['Negatives'])
+                    Text('  - $negative'),
+                  Text('Considerations: ${_parseList(analysisData['Considerations']).join(', ')}'),
+                  for (var consideration in _parseList(analysisData['Considerations']))
+                    Text('  - $consideration'),
+                  Text('Disclaimers:'),
+                  for (var disclaimer in analysisData['Disclaimers'])
+                    Text('  - $disclaimer'),
+                  Text('Dietary Suitability:'),
+                  if (analysisData['Dietary Suitability']
+                      is Map<String, dynamic>) ...[
+                    Text(
+                        '  Vegan: ${analysisData['Dietary Suitability']['Vegan']}'),
+                    Text(
+                        '  Vegetarian: ${analysisData['Dietary Suitability']['Vegetarian']}'),
+                    Text(
+                        '  Gluten-Free: ${analysisData['Dietary Suitability']['Gluten-Free']}'),
+                    Text(
+                        '  Keto: ${analysisData['Dietary Suitability']['Keto']}'),
+                  ] else
+                    Text('  ${analysisData['Dietary Suitability']}'),
+                  Text('  Diabetic:'),
+                  for (var diabetic in analysisData['Diabetic'])
+                    Text('    - $diabetic'),
+                  Text('Overall Analysis:'),
+                  for (var analysis in analysisData['Overall Analysis'])
+                    Text('  - $analysis'),
+                ],
               ),
             );
           } else {
