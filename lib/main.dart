@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'searchPage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +55,14 @@ class HomePage extends StatelessWidget {
               fontStyle: FontStyle.italic, // Optionally, set italic style for the quote
               fontSize: 12, // Optionally, adjust font size for the quote
             ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Login()),
+            ),
+            child: const Text('Login'),
           ),
           SizedBox(height: 200), // Add space below the quote
           Image.network(
