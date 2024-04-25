@@ -29,7 +29,6 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Sign Up"), // Change the app bar title to "Sign Up"
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -71,16 +70,17 @@ class _SignUpState extends State<SignUp> {
                 width: 150,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.white, // Background color white
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.orange), // Border color orange
                 ),
                 child: Center(
                   child: isSigningUp
-                      ? CircularProgressIndicator(color: Colors.white) // Use white color for CircularProgressIndicator
+                      ? CircularProgressIndicator(color: Colors.orange) // Use orange color for CircularProgressIndicator
                       : Text(
                           "Sign Up",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.orange, // Text color orange
                             fontWeight: FontWeight.bold,
                           ),
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonproject/form_Container_widget.dart';
+import 'package:hackathonproject/main.dart';
 import 'signup.dart';
 
 class Login extends StatefulWidget {
@@ -26,7 +27,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Sign in"),
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -71,12 +72,12 @@ class _LoginState extends State<Login> {
             SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Row(
                 children: [
                   Text(
-                    "Signup",
+                    "HomePage",
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   ),
                   Spacer(),
@@ -100,7 +101,7 @@ class _LoginState extends State<Login> {
                   child: isSigning
                       ? CircularProgressIndicator(color: Colors.black)
                       : Text(
-                          "Login",
+                          "Sign in",
                           style: TextStyle(
                             color: Colors.orange,
                             fontWeight: FontWeight.bold,
