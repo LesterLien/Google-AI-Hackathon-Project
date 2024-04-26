@@ -41,7 +41,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
   Map<String, dynamic> parseAnalysisData(String rawData) {
     Map<String, dynamic> parsedData = {};
 
-    List<String> pairs = rawData.split(',');
+    List<String> pairs = rawData.split('~');
     for (String pair in pairs) {
       int index = pair.indexOf(':');
       if (index != -1) {
