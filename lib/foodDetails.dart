@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'analysisPage.dart'; // Import the AnalysisPage
+import 'analysisPage.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'favorites.dart';
 
 class FoodDetailsPage extends StatefulWidget {
@@ -27,43 +28,63 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
     }
   }
 
-  void toggleFavorite() async {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-
-    // Call function from favorites.dart to save/unsave
-    if (isFavorite) {
-      await FavoritesService.saveFavorite(widget.fdcId);
-    } else {
-      await FavoritesService.unsaveFavorite(widget.fdcId);
-    }
+  Future<void> _saveFavoriteState(bool isFavorite) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('${widget.fdcId}_isFavorite', isFavorite);
   }
 
-  @override
+  Future<bool> _getFavoriteState() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('${widget.fdcId}_isFavorite') ?? false;
+  }
+
+  void toggleFavorite() async {
+    if (isFavorite) {
+      await FavoritesService.unsaveFavorite(widget.fdcId);
+      setState(() {
+        isFavorite = false; 
+      });
+    } else {
+      await FavoritesService.saveFavorite(widget.fdcId);
+      setState(() {
+        isFavorite = true; 
+      });
+    }
+    await _saveFavoriteState(isFavorite);
+  }
+
+@override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Food Details'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchFoodDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            return ListView(
-              children: <Widget>[
-                ListTile(
-                  title: const Text('Item'),
-                  subtitle: Text(snapshot.data!['brandName'] ?? 'N/A'),
-                ),
+    return FutureBuilder<bool>(
+      future: _getFavoriteState(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          isFavorite = snapshot.data!;
+        } else {
+          // Handle initial state (can be set to false)
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Food Details'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          body: FutureBuilder<Map<String, dynamic>>(
+            future: fetchFoodDetails(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (snapshot.hasData) {
+                return ListView(
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text('Item'),
+                      subtitle: Text(snapshot.data!['brandName'] ?? 'N/A'),
+                    ),
                 ListTile(
                   title: const Text('Brand Owner'),
                   subtitle: Text(snapshot.data!['brandOwner'] ?? 'N/A'),
@@ -111,9 +132,11 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
             );
           } else {
             return const Center(child: Text('No data available'));
-          }
-        },
-      ),
+            }
+          },
+        ),
+      );
+    },
     );
   }
 }
