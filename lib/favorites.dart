@@ -7,15 +7,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FavoritesService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final String _favoritesCollection = 'favorites';
+  static final String favoritesCollection = 'favorites';
 
   static Future<void> saveFavorite(String fdcId) async {
-    final userId = await _getCurrentUserId(); 
+    final userId = await getCurrentUserId(); 
     if (userId == null) {
       return; 
     }
 
-    final favoritesRef = _firestore.collection(_favoritesCollection).doc(userId);
+    final favoritesRef = _firestore.collection(favoritesCollection).doc(userId);
     final favoritesSnapshot = await favoritesRef.get(); 
 
     final List<String> currentFoods = (favoritesSnapshot.exists ? (favoritesSnapshot.data() as Map<String, dynamic>)['foods'] : [])?.cast<String>() ?? [];
@@ -34,12 +34,12 @@ class FavoritesService {
   }
 
   static Future<void> unsaveFavorite(String fdcId) async {
-    final userId = await _getCurrentUserId(); 
+    final userId = await getCurrentUserId(); 
     if (userId == null) {
       return; 
     }
 
-    final favoritesRef = _firestore.collection(_favoritesCollection).doc(userId);
+    final favoritesRef = _firestore.collection(favoritesCollection).doc(userId);
     final favoritesSnapshot = await favoritesRef.get(); 
 
  
@@ -58,7 +58,7 @@ class FavoritesService {
     print("Unsaved favorite: $fdcId for user: $userId");
   }
 
-  static Future<String?> _getCurrentUserId() async {
+  static Future<String?> getCurrentUserId() async {
 
     final user = FirebaseAuth.instance.currentUser;
 

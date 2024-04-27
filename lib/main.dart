@@ -3,6 +3,7 @@ import 'searchPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'homepage.dart';
+import 'favoriteUser.dart';
 
 
 void main() async {
@@ -69,6 +70,15 @@ class HomePage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const Login()),
             ),
             child: const Text('Login'),
+          ),
+                    SizedBox(height:10),
+
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoritesUser()),
+            ),
+            child: const Text('favorite'),
           ),
           SizedBox(height: 150),
           Image(
