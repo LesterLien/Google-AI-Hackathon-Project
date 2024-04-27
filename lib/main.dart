@@ -78,9 +78,9 @@ class HomePage extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const FavoritesUser()),
             ),
-            child: const Text('favorite'),
+            child: const Text('Favorite'),
           ),
-          SizedBox(height: 150),
+          SizedBox(height: 50),
           Image(
             image: AssetImage('images/logo.png'),
             
