@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'foodDetails.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'foodDetails.dart'; // Import foodDetails.dart
-import 'favorites.dart'; // Import FavoritesService
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'favorites.dart';
 
 class FavoritesUser extends StatefulWidget {
   const FavoritesUser({Key? key}) : super(key: key);
@@ -15,24 +14,8 @@ class FavoritesUser extends StatefulWidget {
 
 class _FavoritesUserState extends State<FavoritesUser> {
   List<String> _favoriteFdcIds = [];
-
-  Future<void> _getFavorites() async {
-    final userId = await FavoritesService.getCurrentUserId(); // Using the local function to get the user ID
-    if (userId == null) {
-      return;
-    }
-
-    final favoritesRef = FirebaseFirestore.instance
-        .collection(FavoritesService.favoritesCollection) // Accessing the local field
-        .doc(userId);
-    final favoritesSnapshot = await favoritesRef.get();
-
-    if (favoritesSnapshot.exists) {
-      setState(() {
-        _favoriteFdcIds = List<String>.from(favoritesSnapshot.data()!['foods']);
-      });
-    }
-  }
+  List<Map<String, dynamic>> _favoriteFoodDetails = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -40,52 +23,46 @@ class _FavoritesUserState extends State<FavoritesUser> {
     _getFavorites();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
-      ),
-      body: _favoriteFdcIds.isEmpty
-          ? const Center(child: Text('No favorites yet'))
-          : ListView.builder(
-              itemCount: _favoriteFdcIds.length,
-              itemBuilder: (context, index) => FutureBuilder<Map<String, dynamic>>(
-                future: _fetchFoodDetails(_favoriteFdcIds[index]),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    final foodData = snapshot.data!;
-                    return ListTile(
-                      title: Text(foodData['brandName'] ?? 'N/A'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(foodData['description'] ?? 'N/A'),
-                          Text('UPC: ${foodData['gtinUpc'] ?? 'N/A'}',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey)),
-                        ],
-                      ),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FoodDetailsPage(
-                                fdcId: _favoriteFdcIds[index])),
-                      ),
-                    );
-                  } else {
-                    return const Center(child: Text('No data available'));
-                  }
-                },
-              ),
-            ),
-    );
+  Future<void> _getFavorites() async {
+
+    final List<String> favoriteFdcIds = await _getFavoriteFdcIds();
+
+    setState(() {
+      _favoriteFdcIds = favoriteFdcIds;
+      _isLoading = true;
+    });
+
+
+    await Future.forEach<String>(_favoriteFdcIds, (String fdcId) async {
+      final foodDetails = await _fetchFoodDetails(fdcId);
+      setState(() {
+        _favoriteFoodDetails.add(foodDetails);
+      });
+    });
+
+    setState(() {
+      _isLoading = false;
+    });
   }
+
+Future<List<String>> _getFavoriteFdcIds() async {
+  final userId = await FavoritesService.getCurrentUserId();
+  if (userId == null) {
+    return []; // Return empty list if user is not logged in
+  }
+
+  final favoritesRef = FirebaseFirestore.instance
+      .collection(FavoritesService.favoritesCollection)
+      .doc(userId);
+
+  final favoritesSnapshot = await favoritesRef.get();
+  if (favoritesSnapshot.exists) {
+    final List<dynamic> foods = favoritesSnapshot.data()?['foods'] ?? [];
+    return foods.map((food) => food.toString()).toList();
+  } else {
+    return []; 
+  }
+}
 
   Future<Map<String, dynamic>> _fetchFoodDetails(String fdcId) async {
     final url = Uri.parse(
@@ -96,5 +73,45 @@ class _FavoritesUserState extends State<FavoritesUser> {
     } else {
       throw Exception('Failed to load food details');
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Favorites'),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _favoriteFdcIds.isEmpty
+              ? const Center(child: Text('No favorites yet'))
+              : ListView.builder(
+                  itemCount: _favoriteFoodDetails.length,
+                  itemBuilder: (context, index) {
+                    final foodDetails = _favoriteFoodDetails[index];
+                    return ListTile(
+                      title: Text(foodDetails['brandName'] ?? 'N/A'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(foodDetails['description'] ?? 'N/A'),
+                          Text('UPC: ${foodDetails['gtinUpc'] ?? 'N/A'}',
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey)),
+                        ],
+                      ),
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FoodDetailsPage(
+                            fdcId: _favoriteFdcIds[index],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+    );
   }
 }
