@@ -2,20 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'analysisPage.dart'; // Import the AnalysisPage
+import 'favorites.dart';
 
-class FoodDetailsPage extends StatelessWidget {
+class FoodDetailsPage extends StatefulWidget {
   final String fdcId;
 
   const FoodDetailsPage({Key? key, required this.fdcId}) : super(key: key);
 
+  @override
+  State<FoodDetailsPage> createState() => _FoodDetailsPageState();
+}
+
+class _FoodDetailsPageState extends State<FoodDetailsPage> {
+  bool isFavorite = false; // Flag to track favorite state
+
   Future<Map<String, dynamic>> fetchFoodDetails() async {
     final url = Uri.parse(
-        'https://get-food-details-mfckn4ttpa-uc.a.run.app/?fdcId=$fdcId');
+        'https://get-food-details-mfckn4ttpa-uc.a.run.app/?fdcId=${widget.fdcId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to load food details');
+    }
+  }
+
+  void toggleFavorite() async {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+
+    // Call function from favorites.dart to save/unsave
+    if (isFavorite) {
+      await FavoritesService.saveFavorite(widget.fdcId);
+    } else {
+      await FavoritesService.unsaveFavorite(widget.fdcId);
     }
   }
 
@@ -71,10 +92,20 @@ class FoodDetailsPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => AnalysisPage(fdcId: fdcId)),
+                          builder: (context) => AnalysisPage(fdcId: widget.fdcId)),
                     );
                   },
                   child: Text('Analyze'),
+                ),
+                IconButton(
+                  icon: SizedBox(
+                    height: 24, // Adjust height as needed
+                    width: 24, // Adjust width as needed
+                    child: Image(
+                      image: AssetImage(isFavorite ? 'images/favorite.png' : 'images/unfavorite.png'),
+                    ),
+                  ),
+                  onPressed: toggleFavorite,
                 ),
               ],
             );
@@ -86,3 +117,4 @@ class FoodDetailsPage extends StatelessWidget {
     );
   }
 }
+
