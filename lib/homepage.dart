@@ -72,9 +72,12 @@ class newHome extends StatelessWidget {
             child: Text("Sign out"),
           ),
           SizedBox(height: 150),
-          Image.network(
-            'https://via.placeholder.com/150',
-            height: 150, 
+          Image(
+            image: AssetImage('images/logo.png'),
+            
+            fit: BoxFit.cover, 
+            width: 200, 
+            height: 200, 
           ),
           SizedBox(height: 20), 
           ElevatedButton(
