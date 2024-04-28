@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart';
 import 'main.dart';
+import 'favoriteUser.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,10 +72,21 @@ class newHome extends StatelessWidget {
             },
             child: Text("Sign out"),
           ),
-          SizedBox(height: 150),
-          Image.network(
-            'https://via.placeholder.com/150',
-            height: 150, 
+          SizedBox(height:10),
+
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoritesUser()),
+            ),
+            child: const Text('Favorite'),
+          ),
+          SizedBox(height: 50),
+          Image(
+            image: AssetImage('images/logo.png'),
+            fit: BoxFit.cover, 
+            width: 200, 
+            height: 200, 
           ),
           SizedBox(height: 20), 
           ElevatedButton(

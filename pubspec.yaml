@@ -33,6 +33,7 @@ dependencies:
   http: ^1.2.1
   flutter_dotenv: ^5.1.0
   flutter_gemini: ^2.0.3
+  shared_preferences: ^2.2.3
 
 #Login system
   cloud_firestore: ^4.17.2
@@ -71,6 +72,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/logo.png
+    - images/favorite.png
+    - images/unfavorite.png
  
 
   # An image asset can refer to one or more resolution-specific "variants", see
