@@ -75,6 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(_searchResults[index]['brandOwner']),
                     Text(_searchResults[index]['description']),
                     Text('UPC: ${_searchResults[index]['gtinUpc']}',
                         style: TextStyle(

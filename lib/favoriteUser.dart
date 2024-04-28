@@ -116,6 +116,7 @@ class _FavoritesUserState extends State<FavoritesUser> {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(foodDetails['brandOwner'] ?? 'N/A'),
                           Text(foodDetails['description'] ?? 'N/A'),
                           Text('UPC: ${foodDetails['gtinUpc'] ?? 'N/A'}',
                               style: const TextStyle(

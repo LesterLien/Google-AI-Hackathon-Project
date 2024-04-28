@@ -42,14 +42,14 @@ def get_food_details(request: https_fn.Request) -> https_fn.Response:
 def search_food(request: https_fn.Request) -> https_fn.Response:
     query = request.args.get('query', '')
     api_key = 'KnbgdtX65ISaS5jKyDefHDsbrfiVOUKULfHgZMS0'
-    search_url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key={api_key}&query={query}&pageSize=30'
+    search_url = f'https://api.nal.usda.gov/fdc/v1/foods/search?api_key={api_key}&query={query}&pageSize=60'
     
     search_response = requests.get(search_url)
     if search_response.status_code == 200:
         search_data = search_response.json()
         formatted_results = [
             {
-                'brandName': item.get('brandOwner'),
+                'brandName': item.get('brandName'),
                 'description': item.get('description', 'No description available'),
                 'brandOwner': item.get('brandOwner'),
                 'fdcId': item.get('fdcId'),  # Include the fdcId in the response
@@ -57,6 +57,7 @@ def search_food(request: https_fn.Request) -> https_fn.Response:
             }
             for item in search_data.get('foods', [])
             if item.get('brandOwner') and item.get('brandOwner') != 'Unknown Brand'  # Filter out unknown brands and owners
+            if item.get('brandName') and item.get('brandName') != None  # Filter out unknown brands and owners
         ][:30]  # Ensure only up to 30 items are included even if more are fetched
         return https_fn.Response(json.dumps(formatted_results), status=200, headers={'Content-Type': 'application/json'})
     else:
