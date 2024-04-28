@@ -28,7 +28,7 @@ class SignUpState extends State<SignUp> {
     passwordController.dispose();
     super.dispose();
   }
-
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,22 +69,60 @@ class SignUpState extends State<SignUp> {
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
               SizedBox(height: 5),
-              FormContainerWidget(
-                controller: usernameController,
+              // FormContainerWidget(
+              //   controller: usernameController,
+              //   hintText: "Username",
+              //   isPasswordField: false,
+              // )
+              TextFormField(
+                controller: usernameController, // Assign a TextEditingController
+                decoration: InputDecoration(
                 hintText: "Username",
-                isPasswordField: false,
+                prefixIcon: Icon(Icons.account_box),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0),
+                  ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Set border radius // Specify the gray color
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
-                controller: emailController,
-                hintText: "Email",
-                isPasswordField: false,
+              TextFormField(
+                controller: emailController, // Assign a TextEditingController
+                decoration: InputDecoration(
+                hintText: "Enter your email",
+                prefixIcon: Icon(Icons.email),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0),
+                  ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Set border radius // Specify the gray color
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
-                controller: passwordController,
-                hintText: "Password",
-                isPasswordField: true,
+              TextFormField(
+                controller: passwordController, // Assign a TextEditingController
+                obscureText: !_isPasswordVisible, // Toggle password visibility
+                decoration: InputDecoration(
+                  hintText: "Enter your password",
+                  prefixIcon: Icon(Icons.lock),
+                  filled: true,
+                  fillColor: Colors.grey[250],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  suffixIcon: IconButton(
+                    icon: _isPasswordVisible
+                        ? Icon(Icons.visibility)
+                        : Icon(Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible; // Toggle password visibility
+                      });
+                    },
+                  ),
+                ),
               ),
               SizedBox(height: 30),
               GestureDetector(
@@ -137,7 +175,7 @@ class SignUpState extends State<SignUp> {
     );
   }
 
-  void signUp() async {
+   void signUp() async {
     setState(() {
       isSigningUp = true;
     });
@@ -160,3 +198,4 @@ class SignUpState extends State<SignUp> {
     }
   }
 }
+

@@ -11,13 +11,13 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => LoginState();
 }
-
+bool _isPasswordVisible = false;
 class LoginState extends State<Login> {
   bool isSigning = false;
   final FirebaseAuthService auth = FirebaseAuthService();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
+  
   @override
   void dispose() {
     _emailController.dispose();
@@ -60,10 +60,17 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-              FormContainerWidget(
-                controller: _emailController,
+              TextFormField(
+                controller: _emailController, // Assign a TextEditingController
+                decoration: InputDecoration(
                 hintText: "Enter your email",
-                isPasswordField: false,
+                prefixIcon: Icon(Icons.email),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0),
+                  ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Set border radius // Specify the gray color
+                ),
               ),
               SizedBox(height: 10),
               Row(
@@ -75,10 +82,29 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-              FormContainerWidget(
-                controller: _passwordController,
-                hintText: "Enter your Password",
-                isPasswordField: true,
+              TextFormField(
+                controller: _passwordController, // Assign a TextEditingController
+                obscureText: !_isPasswordVisible, // Toggle password visibility
+                decoration: InputDecoration(
+                  hintText: "Enter your password",
+                  prefixIcon: Icon(Icons.lock),
+                  filled: true,
+                  fillColor: Colors.grey[250],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  suffixIcon: IconButton(
+                    icon: _isPasswordVisible
+                        ? Icon(Icons.visibility)
+                        : Icon(Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible; // Toggle password visibility
+                      });
+                    },
+                  ),
+                ),
               ),
               SizedBox(height: 30),
               GestureDetector(
