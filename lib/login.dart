@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hackathonproject/form_Container_widget.dart';
 import 'package:hackathonproject/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hackathonproject/firebase/auth';
 import 'signup.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => LoginState();
@@ -14,8 +15,8 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   bool isSigning = false;
   final FirebaseAuthService auth = FirebaseAuthService();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -23,31 +24,34 @@ class LoginState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
-  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text("Homepage"),
+        title: Text("Homepage"),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: GestureDetector(
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage()),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
-              const Text(
+              SizedBox(height: 30),
+              Text(
                 "Sign In",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.orange),
+                style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange),
               ),
-              const SizedBox(height: 30),
-              const Row(
+              SizedBox(height: 30),
+              Row(
                 children: [
                   Text(
                     "Email",
@@ -56,24 +60,13 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: const Padding(
-                  padding: EdgeInsets.only(left: 8, right: 8), // Adjust spacing here
-                  child: Icon(Icons.email), // Add icon for password
-                  ),
-                  hintText: "Enter your email",
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  filled: true, // Set filled to true
-                  fillColor: Colors.grey[250], // Specify the background color
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
+              FormContainerWidget(
+                controller: _emailController,
+                hintText: "Enter your email",
+                isPasswordField: false,
               ),
-              const SizedBox(height: 10),
-              const Row(
+              SizedBox(height: 10),
+              Row(
                 children: [
                   Text(
                     "Password",
@@ -82,34 +75,12 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-             TextFormField(
-              obscureText: !_isPasswordVisible, // Inverse the visibility state
-              decoration: InputDecoration(
-                hintText: "Enter your password",
-                hintStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 8), // Adjust spacing here
-                  child: Icon(Icons.lock), // Add icon for password
-                ),
-                suffixIcon: IconButton(
-                  icon: _isPasswordVisible
-                      ? const Icon(Icons.visibility)
-                      : const Icon(Icons.visibility_off), // Change icon based on visibility state
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible; // Toggle visibility state
-                    });
-                  },
-                ),
-                filled: true, // Set filled to true
-                fillColor: Colors.grey[250], // Specify the background color
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                ),
+              FormContainerWidget(
+                controller: _passwordController,
+                hintText: "Enter your Password",
+                isPasswordField: true,
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30),
               GestureDetector(
                 onTap: () {
                   signIn();
@@ -124,8 +95,8 @@ class LoginState extends State<Login> {
                   ),
                   child: Center(
                     child: isSigning
-                        ? const CircularProgressIndicator(color: Colors.black)
-                        : const Text(
+                        ? CircularProgressIndicator(color: Colors.black)
+                        : Text(
                             "Sign in",
                             style: TextStyle(
                               color: Colors.orange,
@@ -135,19 +106,20 @@ class LoginState extends State<Login> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't have an account? ",
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUp())); 
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => SignUp()));
                     },
-                    child: const Text(
+                    child: Text(
                       "Sign up", // Change text to "Sign up"
                       style: TextStyle(fontSize: 15, color: Colors.blue),
                     ),
@@ -170,7 +142,6 @@ class LoginState extends State<Login> {
     String password = _passwordController.text;
 
     User? user = await auth.signInWithEmailAndPassword(email, password);
-
 
     setState(() {
       isSigning = false;
