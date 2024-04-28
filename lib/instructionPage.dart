@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InstructionPage extends StatefulWidget{
-  const InstructionPage({Key? key}) : super(key: key);
+  const InstructionPage({super.key});
 
   @override
   _InstructionPageState createState() => _InstructionPageState();
@@ -12,9 +12,9 @@ class _InstructionPageState extends State<InstructionPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Instructions'),
+        title: const Text('Instructions'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -23,11 +23,11 @@ class _InstructionPageState extends State<InstructionPage>{
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'How to Use the App:',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orange),
             ),
-            SizedBox(height: 20), // Add space between title and list
+            const SizedBox(height: 20), // Add space between title and list
             _buildInstructionListItem('Start by navigating to the search page and typing the name of a food item in the search bar.'),
             _buildInstructionListItem('Press Enter or tap the search icon to initiate the search.'),
             _buildInstructionListItem('Tap on a food item to view its product description.'),
@@ -48,7 +48,7 @@ Widget _buildInstructionListItem(String text) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 32,
             child: Text(
               '•',
@@ -58,11 +58,11 @@ Widget _buildInstructionListItem(String text) {
               ),
             ),
           ),
-          SizedBox(width: 8), // Add space between bullet and text
+          const SizedBox(width: 8), // Add space between bullet and text
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Roboto', // Change the font family
                 fontSize: 16,
               ),

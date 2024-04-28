@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -50,7 +50,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: const Text('Search Foods'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -78,7 +78,7 @@ class _SearchPageState extends State<SearchPage> {
                     Text(_searchResults[index]['brandOwner']),
                     Text(_searchResults[index]['description']),
                     Text('UPC: ${_searchResults[index]['gtinUpc']}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 12,
                             color:
                                 Colors.grey)) // Displaying UPC in smaller text

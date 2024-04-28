@@ -14,7 +14,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,22 +26,22 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(),
       routes: {
-        '/home1': (context) => HomePage(),
-        '/home2': (context) => newHome(), 
+        '/home1': (context) => const HomePage(),
+        '/home2': (context) => const newHome(), 
       },
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
+        title: const Text(
           'Conscious Cart',
           style: TextStyle(
             fontFamily: 'Pacifico', 
@@ -56,8 +56,8 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 10), 
-          Text(
+          const SizedBox(height: 10), 
+          const Text(
             '"Every product holds a story. Let your purchases tell tales of compassion, sustainability, and ethical values."',
             textAlign: TextAlign.center, 
             style: TextStyle(
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
               fontSize: 12, 
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Login'),
           ),
-                    SizedBox(height:10),
+                    const SizedBox(height:10),
 
           ElevatedButton(
             onPressed: () => Navigator.push(
@@ -82,15 +82,15 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Favorite'),
           ),
-          SizedBox(height: 50),
-          Image(
+          const SizedBox(height: 50),
+          const Image(
             image: AssetImage('images/logo.png'),
             
             fit: BoxFit.cover, 
             width: 200, 
             height: 200, 
           ),
-          SizedBox(height: 20), 
+          const SizedBox(height: 20), 
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -98,8 +98,8 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Instruction'),
           ),
-          SizedBox(height: 20), 
-          SizedBox(height: 20), 
+          const SizedBox(height: 20), 
+          const SizedBox(height: 20), 
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -107,7 +107,7 @@ class HomePage extends StatelessWidget {
             ),
             child: const Text('Start being Conscious about your Cart!'),
           ),
-          SizedBox(height: 20), 
+          const SizedBox(height: 20), 
         ],
       ),
     );

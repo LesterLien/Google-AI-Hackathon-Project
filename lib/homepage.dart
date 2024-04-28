@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'searchPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login.dart';
 import 'main.dart';
 import 'favoriteUser.dart';
 
@@ -13,7 +12,7 @@ void main() async {
 }
 
 class MyApp2 extends StatelessWidget {
-  const MyApp2({Key? key}) : super(key: key);
+  const MyApp2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +24,22 @@ class MyApp2 extends StatelessWidget {
       ),
       home: const newHome(),
       routes: {
-        '/home1': (context) => HomePage(),
-        '/home2': (context) => newHome(), 
+        '/home1': (context) => const HomePage(),
+        '/home2': (context) => const newHome(), 
       },
     );
   }
 }
 
 class newHome extends StatelessWidget {
-  const newHome({Key? key}) : super(key: key);
+  const newHome({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(
+        title: const Text(
           'Conscious Cart',
           style: TextStyle(
             fontFamily: 'Pacifico', 
@@ -55,8 +54,8 @@ class newHome extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 10), 
-          Text(
+          const SizedBox(height: 10), 
+          const Text(
             '"Every product holds a story. Let your purchases tell tales of compassion, sustainability, and ethical values."',
             textAlign: TextAlign.center, 
             style: TextStyle(
@@ -64,16 +63,16 @@ class newHome extends StatelessWidget {
               fontSize: 12, 
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           ElevatedButton(
             onPressed: () {
               FirebaseAuth.instance.signOut();
               Navigator.pushReplacementNamed(context, "/home1");
             },
-            child: Text("Sign out"),
+            child: const Text("Sign out"),
           ),
-          SizedBox(height:10),
+          const SizedBox(height:10),
 
           ElevatedButton(
             onPressed: () => Navigator.push(
@@ -82,14 +81,14 @@ class newHome extends StatelessWidget {
             ),
             child: const Text('Favorite'),
           ),
-          SizedBox(height: 50),
-          Image(
+          const SizedBox(height: 50),
+          const Image(
             image: AssetImage('images/logo.png'),
             fit: BoxFit.cover, 
             width: 200, 
             height: 200, 
           ),
-          SizedBox(height: 20), 
+          const SizedBox(height: 20), 
           ElevatedButton(
             onPressed: () => Navigator.push(
               context,
@@ -97,7 +96,7 @@ class newHome extends StatelessWidget {
             ),
             child: const Text('Start being Conscious about your Cart!'),
           ),
-          SizedBox(height: 20), 
+          const SizedBox(height: 20), 
         ],
       ),
     );

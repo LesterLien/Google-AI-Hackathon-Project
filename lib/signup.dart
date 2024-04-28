@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hackathonproject/firebase/auth';
-import 'package:hackathonproject/form_Container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart'; 
 import 'main.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({super.key});
 
   @override
   State<SignUp> createState() => SignUpState();
@@ -33,14 +32,14 @@ class SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Homepage"),
+        title: const Text("Homepage"),
         automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
             );
           },
         ),
@@ -48,71 +47,71 @@ class SignUpState extends State<SignUp> {
       body: GestureDetector(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 30),
-              Text(
+              const SizedBox(height: 30),
+              const Text(
                 "Create Account",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.orange),
               ),
-              SizedBox(height: 30),
-              Text(
+              const SizedBox(height: 30),
+              const Text(
                 "Fill in your credentials below",
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Padding(
+                  prefixIcon: const Padding(
                   padding: EdgeInsets.only(left: 8, right: 8), // Adjust spacing here
                   child: Icon(Icons.account_box), // Add icon for password
                   ),
                   hintText: "Enter your username",
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true, // Set filled to true
                   fillColor: Colors.grey[250], // Specify the background color
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: Padding(
+                  prefixIcon: const Padding(
                   padding: EdgeInsets.only(left: 8, right: 8), // Adjust spacing here
                   child: Icon(Icons.email), // Add icon for password
                   ),
                   hintText: "Enter your email",
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                   filled: true, // Set filled to true
                   fillColor: Colors.grey[250], // Specify the background color
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
               obscureText: !_isPasswordVisible, // Inverse the visibility state
               decoration: InputDecoration(
                 hintText: "Enter your password",
-                hintStyle: TextStyle(color: Colors.grey),
-                prefixIcon: Padding(
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: const Padding(
                   padding: EdgeInsets.only(left: 10, right: 8), // Adjust spacing here
                   child: Icon(Icons.lock), // Add icon for password
                 ),
                 suffixIcon: IconButton(
                   icon: _isPasswordVisible
-                      ? Icon(Icons.visibility)
-                      : Icon(Icons.visibility_off), // Change icon based on visibility state
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off), // Change icon based on visibility state
                   onPressed: () {
                     setState(() {
                       _isPasswordVisible = !_isPasswordVisible; // Toggle visibility state
@@ -121,13 +120,13 @@ class SignUpState extends State<SignUp> {
                 ),
                 filled: true, // Set filled to true
                 fillColor: Colors.grey[250], // Specify the background color
-                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               GestureDetector(
                 onTap: signUp,
                 child: Container(
@@ -140,8 +139,8 @@ class SignUpState extends State<SignUp> {
                   ),
                   child: Center(
                     child: isSigningUp
-                        ? CircularProgressIndicator(color: Colors.orange)
-                        : Text(
+                        ? const CircularProgressIndicator(color: Colors.orange)
+                        : const Text(
                             "Sign Up",
                             style: TextStyle(
                               color: Colors.orange,
@@ -151,19 +150,19 @@ class SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Already have an account? ",
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Login())); 
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const Login())); 
                     },
-                    child: Text(
+                    child: const Text(
                       "Login", // Change text to "Sign up"
                       style: TextStyle(fontSize: 15, color: Colors.blue),
                     ),

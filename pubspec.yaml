@@ -46,16 +46,10 @@ dependencies:
   cupertino_icons: ^1.0.6
   google_generative_ai: ^0.3.1
 
+  firebase_core: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_core: ^2.30.0
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the

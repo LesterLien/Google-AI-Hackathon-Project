@@ -5,7 +5,7 @@ import 'dart:convert';
 class AnalysisPage extends StatefulWidget {
   final String fdcId;
 
-  AnalysisPage({Key? key, required this.fdcId}) : super(key: key);
+  const AnalysisPage({super.key, required this.fdcId});
 
   @override
   _AnalysisPageState createState() => _AnalysisPageState(fdcId: fdcId);
@@ -66,13 +66,13 @@ class _AnalysisPageState extends State<AnalysisPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Food Analysis'),
+        title: const Text('Food Analysis'),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _analysisResult,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error.toString()}'));
           } else if (snapshot.hasData) {
@@ -81,45 +81,45 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 parseAnalysisData(snapshot.data!['analysis']);
 
             return SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Brand: ${analysisData['Brand']}",
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                  SizedBox(height: 10),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  const SizedBox(height: 10),
                   Text("Ingredients: ${analysisData['Ingredients'].join(', ')}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Potential Allergens: ${analysisData['Potential Allergens']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Positives: ${analysisData['Positive']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Negatives: ${analysisData['Negatives']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Considerations: ${analysisData['Considerations']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Disclaimers: ${analysisData['Disclaimers']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Vegan: ${analysisData['Vegan']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Vegetarian: ${analysisData['Vegetarian']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Gluten-Free: ${analysisData['Gluten-Free']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Keto: ${analysisData['Keto']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Considerations: ${analysisData['Considerations']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Diabetic: ${analysisData['Diabetic']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text("Overall Analysis: ${analysisData['Paragraph1']}. " "${analysisData['Paragraph2']}"),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                 ],
               ),
             );
           } else {
-            return Center(child: Text('No data available'));
+            return const Center(child: Text('No data available'));
           }
         },
       ),

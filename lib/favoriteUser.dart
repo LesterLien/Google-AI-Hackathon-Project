@@ -14,7 +14,7 @@ class FavoritesService {
 }
 
 class FavoritesUser extends StatefulWidget {
-  const FavoritesUser({Key? key}) : super(key: key);
+  const FavoritesUser({super.key});
 
   @override
   State<FavoritesUser> createState() => _FavoritesUserState();

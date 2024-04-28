@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart'; // Import for FirebaseFirestore
+// Import for FirebaseFirestore
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import for FirebaseFirestore
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FavoritesService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final String favoritesCollection = 'favorites';
+  static const String favoritesCollection = 'favorites';
 
   static Future<void> saveFavorite(String fdcId) async {
     final userId = await getCurrentUserId(); 
@@ -44,7 +41,7 @@ class FavoritesService {
 
  
     final List<String> currentFoods = (favoritesSnapshot.exists ? (favoritesSnapshot.data() as Map<String, dynamic>)['foods'] : null)?.cast<String>();
-    if (currentFoods == null || !currentFoods.contains(fdcId)) {
+    if (!currentFoods.contains(fdcId)) {
       return; // Not favorited
     }
 

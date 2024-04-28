@@ -9,7 +9,7 @@ import 'favorites.dart';
 class FoodDetailsPage extends StatefulWidget {
   final String fdcId;
 
-  const FoodDetailsPage({Key? key, required this.fdcId}) : super(key: key);
+  const FoodDetailsPage({super.key, required this.fdcId});
 
   @override
   State<FoodDetailsPage> createState() => _FoodDetailsPageState();
@@ -68,7 +68,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
           appBar: AppBar(
             title: const Text('Food Details'),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -117,7 +117,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                           builder: (context) => AnalysisPage(fdcId: widget.fdcId)),
                     );
                   },
-                  child: Text('Analyze'),
+                  child: const Text('Analyze'),
                 ),
                 IconButton(
                   icon: SizedBox(
