@@ -5,6 +5,7 @@ import 'analysisPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'favorites.dart';
 
+
 class FoodDetailsPage extends StatefulWidget {
   final String fdcId;
 
