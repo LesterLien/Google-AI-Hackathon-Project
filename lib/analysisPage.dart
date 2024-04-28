@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'api_keys.dart';
 
 class AnalysisPage extends StatefulWidget {
   final String fdcId;
@@ -14,7 +12,7 @@ class AnalysisPage extends StatefulWidget {
 }
 
 class _AnalysisPageState extends State<AnalysisPage> {
-  late Future<String> _analysisResult;
+  late Future<Map<String, dynamic>> _analysisResult;
   final String fdcId;
 
   _AnalysisPageState({required this.fdcId});
@@ -25,169 +23,99 @@ class _AnalysisPageState extends State<AnalysisPage> {
     _analysisResult = _fetchAnalysis();
   }
 
-  Future<String> _fetchAnalysis() async {
-    final String foodDetailsJson = await _fetchFoodDetails();
-    final String prompt = generatePrompt(foodDetailsJson);
-
-    final apiKey =
-        geminiApiKey; // Make sure your API key is correctly configured
-    final url = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=$apiKey');
-
-    // Prepare the JSON request body with the correct configuration
-    final requestBody = jsonEncode({
-      "contents": [
-        {
-          "parts": [
-            {"text": prompt}
-          ]
-        }
-      ],
-      "generationConfig": {
-        "response_mime_type":
-            "application/json", // Requesting JSON format response
-      }
-    });
-
-    // Send the POST request to the API
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json'
-      }, // Set headers to indicate JSON content type
-      body: requestBody,
-    );
-
-    if (response.statusCode == 200) {
-      // If the server returns a 200 OK response, parse the JSON
-      print('Response from model: ${response.body}');
-      return _formatAnalysis(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception(
-          'Failed to generate content with status code: ${response.statusCode}');
-    }
-  }
-
-
-  Future<String> _fetchFoodDetails() async {
-    final url = Uri.parse(
-        'https://get-food-details-mfckn4ttpa-uc.a.run.app/?fdcId=$fdcId');
+  Future<Map<String, dynamic>> _fetchAnalysis() async {
+    final uri = Uri.parse(
+        'https://generate-analysis-mfckn4ttpa-uc.a.run.app?fdcId=$fdcId');
     try {
-      final response = await http.get(url);
+      final response = await http.get(uri);
       if (response.statusCode == 200) {
-        return response.body;
+        return json.decode(response.body);
       } else {
-        throw Exception(
-            'Failed to load food details (Status Code: ${response.statusCode})');
+        throw Exception('Failed to load analysis: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching food details: $e');
-      throw Exception('Failed to fetch food details');
+      throw Exception('Failed to load analysis: $e');
     }
   }
 
-  String _formatAnalysis(String jsonText) {
-    try {
-      final Map<String, dynamic> responseData = jsonDecode(jsonText);
-      // Assuming responseData contains a key 'candidates' which is a list
-      List candidates = responseData['candidates'];
+  Map<String, dynamic> parseAnalysisData(String rawData) {
+    Map<String, dynamic> parsedData = {};
 
-      // Since you expect only one candidate usually, we will take the first one
-      if (candidates.isNotEmpty) {
-        Map<String, dynamic> firstCandidate =
-            candidates.first['content']['parts'].first;
-        // Parse the JSON formatted string inside the 'text' key
-        String jsonContent = firstCandidate['text'];
-        // Remove the extra square brackets and newlines from the string
-        jsonContent =
-            jsonContent.trim().substring(1, jsonContent.length - 2).trim();
-        // Decode the JSON string inside
-        Map<String, dynamic> actualData = jsonDecode(jsonContent);
+    List<String> pairs = rawData.split('~');
+    for (String pair in pairs) {
+      int index = pair.indexOf(':');
+      if (index != -1) {
+        String key = pair.substring(0, index).trim();
+        String value = pair.substring(index + 1).trim();
 
-        // Format the extracted data into a readable format or process it as needed
-        StringBuffer formatted = StringBuffer();
-        formatted.writeln('Brand: ${actualData["Brand"]}');
-        formatted.writeln('Ingredients: ${actualData["Ingredients"]}');
-        formatted.writeln(
-            'Potential Allergens: ${actualData["Potential Allergens"]}');
-        formatted.writeln('Health Evaluation:');
-        formatted.writeln(
-            '  Positives: ${actualData["Health Evaluation"]["Positives"].join(", ")}');
-        formatted.writeln(
-            '  Negatives: ${actualData["Health Evaluation"]["Negatives"].join(", ")}');
-        formatted.writeln(
-            '  Considerations: ${actualData["Health Evaluation"]["Considerations"].join(", ")}');
-        formatted.writeln('Disclaimers: ${actualData["Disclaimers"]}');
-        formatted.writeln('Dietary Suitability:');
-        formatted
-            .writeln('  Vegan: ${actualData["Dietary Suitability"]["Vegan"]}');
-        formatted.writeln(
-            '  Vegetarian: ${actualData["Dietary Suitability"]["Vegetarian"]}');
-        formatted.writeln(
-            '  Gluten-Free: ${actualData["Dietary Suitability"]["Gluten-Free"]}');
-        formatted
-            .writeln('  Keto: ${actualData["Dietary Suitability"]["Keto"]}');
-        formatted.writeln(
-            '  Diabetic: ${actualData["Dietary Suitability"]["Diabetic"]}');
-        formatted
-            .writeln('Overall Analysis: ${actualData["Overall Analysis"]}');
-
-        return formatted.toString();
+        if (value.contains(';')) {
+          List<String> listValues =
+              value.split(';').map((e) => e.trim()).toList();
+          parsedData[key] = listValues;
+        } else {
+          parsedData[key] = value;
+        }
       }
-      return "No valid data found in response.";
-    } catch (e) {
-      print('Error formatting analysis: $e');
-      return 'Failed to format analysis data: $e';
     }
+
+    return parsedData;
   }
 
-
-
-  String generatePrompt(String foodDetails) {
-    return """
-    You are acting as a health advisor analyzing a food product. Please analyze all the provided information and return a detailed analysis in a JSON format with the following keys:
-    * **Brand**: [Brand Name]
-    * **Ingredients**: [Ingredients List]
-    * **Potential Allergens**: [List Potential Allergens, or 'None' if not apparent from ingredients]
-    * **Health Evaluation**: 
-        * **Positives**: [Highlight potential benefits.]
-        * **Negatives**: [Highlight potential drawbacks or concerns.]
-        * **Considerations**: [Additional factors to keep in mind.] 
-    * **Disclaimers**: [Include any necessary disclaimers regarding individual health or dietary restrictions.]
-    * **Dietary Suitability**: 
-        * **Vegan**: [Yes/No]
-        * **Vegetarian**: [Yes/No]
-        * **Gluten-Free**: [Yes/No - Or indicate if it cannot be determined from the provided ingredients]
-        * **Keto**: [Yes/No]
-        * **Diabetic**: [Suitable, Suitable with moderation, Not suitable - Explain briefly]
-    * **Overall Analysis**: Provide a concise two-paragraph summary. In the first paragraph, outline the product's suitability for weight management and sugar control, alongside any notable benefits. In the second paragraph, address potential health concerns, long-term effects of ingredients, and suggest healthier alternatives where relevant.  
-    Please analyze the following product:
-    $foodDetails 
-    """;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analysis Page'),
+        title: Text('Food Analysis'),
       ),
-      body: FutureBuilder<String>(
+      body: FutureBuilder<Map<String, dynamic>>(
         future: _analysisResult,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error.toString()}'));
           } else if (snapshot.hasData) {
-            final formattedAnalysis = snapshot.data!;
+            // Use the parseAnalysisData function to convert the string to a Map
+            final Map<String, dynamic> analysisData =
+                parseAnalysisData(snapshot.data!['analysis']);
+
             return SingleChildScrollView(
               padding: EdgeInsets.all(16.0),
-              child: Text(
-                formattedAnalysis,
-                style: TextStyle(fontSize: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Brand: ${analysisData['Brand']}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  SizedBox(height: 10),
+                  Text("Ingredients: ${analysisData['Ingredients'].join(', ')}"),
+                  SizedBox(height: 10),
+                  Text("Potential Allergens: ${analysisData['Potential Allergens']}"),
+                  SizedBox(height: 10),
+                  Text("Positives: ${analysisData['Positive']}"),
+                  SizedBox(height: 10),
+                  Text("Negatives: ${analysisData['Negatives']}"),
+                  SizedBox(height: 10),
+                  Text("Considerations: ${analysisData['Considerations']}"),
+                  SizedBox(height: 10),
+                  Text("Disclaimers: ${analysisData['Disclaimers']}"),
+                  SizedBox(height: 10),
+                  Text("Vegan: ${analysisData['Vegan']}"),
+                  SizedBox(height: 10),
+                  Text("Vegetarian: ${analysisData['Vegetarian']}"),
+                  SizedBox(height: 10),
+                  Text("Gluten-Free: ${analysisData['Gluten-Free']}"),
+                  SizedBox(height: 10),
+                  Text("Keto: ${analysisData['Keto']}"),
+                  SizedBox(height: 10),
+                  Text("Considerations: ${analysisData['Considerations']}"),
+                  SizedBox(height: 10),
+                  Text("Diabetic: ${analysisData['Diabetic']}"),
+                  SizedBox(height: 10),
+                  Text("Overall Analysis: ${analysisData['Paragraph1']}. " "${analysisData['Paragraph2']}"),
+                  SizedBox(height: 10),
+                ],
               ),
             );
           } else {

@@ -15,6 +15,7 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _searchResults = [];
   bool _isLoading = false;
+  
 
   Future<void> searchFood(String query) async {
     final url = Uri.parse(
