@@ -3,6 +3,7 @@ import 'searchPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login.dart';
 import 'homepage.dart';
+import 'instructionPage.dart';
 import 'favoriteUser.dart';
 
 
@@ -89,6 +90,15 @@ class HomePage extends StatelessWidget {
             width: 200, 
             height: 200, 
           ),
+          SizedBox(height: 20), 
+          ElevatedButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const InstructionPage()),
+            ),
+            child: const Text('Instruction'),
+          ),
+          SizedBox(height: 20), 
           SizedBox(height: 20), 
           ElevatedButton(
             onPressed: () => Navigator.push(

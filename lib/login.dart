@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hackathonproject/form_Container_widget.dart';
 import 'package:hackathonproject/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +25,7 @@ class LoginState extends State<Login> {
     _passwordController.dispose();
     super.dispose();
   }
-
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,10 +58,21 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-              FormContainerWidget(
-                controller: _emailController,
-                hintText: "Enter your email",
-                isPasswordField: false,
+              TextFormField(
+                decoration: InputDecoration(
+                  prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 8, right: 8), // Adjust spacing here
+                  child: Icon(Icons.email), // Add icon for password
+                  ),
+                  hintText: "Enter your email",
+                  hintStyle: TextStyle(color: Colors.grey),
+                  filled: true, // Set filled to true
+                  fillColor: Colors.grey[250], // Specify the background color
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               SizedBox(height: 10),
               Row(
@@ -72,10 +84,32 @@ class LoginState extends State<Login> {
                   Spacer(),
                 ],
               ),
-              FormContainerWidget(
-                controller: _passwordController,
-                hintText: "Enter your Password",
-                isPasswordField: true,
+             TextFormField(
+              obscureText: !_isPasswordVisible, // Inverse the visibility state
+              decoration: InputDecoration(
+                hintText: "Enter your password",
+                hintStyle: TextStyle(color: Colors.grey),
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 8), // Adjust spacing here
+                  child: Icon(Icons.lock), // Add icon for password
+                ),
+                suffixIcon: IconButton(
+                  icon: _isPasswordVisible
+                      ? Icon(Icons.visibility)
+                      : Icon(Icons.visibility_off), // Change icon based on visibility state
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible; // Toggle visibility state
+                    });
+                  },
+                ),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250], // Specify the background color
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                ),
               ),
               SizedBox(height: 30),
               GestureDetector(
