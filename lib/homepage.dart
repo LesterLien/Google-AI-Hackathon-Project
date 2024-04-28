@@ -39,6 +39,7 @@ class newHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Conscious Cart',
           style: TextStyle(
