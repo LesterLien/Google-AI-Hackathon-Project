@@ -48,7 +48,7 @@ class LoginState extends State<Login> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                    color: Colors.green),
               ),
               SizedBox(height: 30),
               Row(
@@ -117,7 +117,7 @@ class LoginState extends State<Login> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.orange),
+                    border: Border.all(color: Colors.green),
                   ),
                   child: Center(
                     child: isSigning
@@ -125,7 +125,7 @@ class LoginState extends State<Login> {
                         : Text(
                             "Sign in",
                             style: TextStyle(
-                              color: Colors.orange,
+                              color: Colors.green,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

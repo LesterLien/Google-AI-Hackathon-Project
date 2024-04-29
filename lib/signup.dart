@@ -69,11 +69,6 @@ class SignUpState extends State<SignUp> {
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
               SizedBox(height: 5),
-              // FormContainerWidget(
-              //   controller: usernameController,
-              //   hintText: "Username",
-              //   isPasswordField: false,
-              // )
               TextFormField(
                 controller: usernameController, // Assign a TextEditingController
                 decoration: InputDecoration(
