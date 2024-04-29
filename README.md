@@ -27,7 +27,7 @@ Start by searching for a food product or scanning its barcode. The app will then
 
 ## Support
 
-Have questions or suggestions? Please let us know my submitting a new issue on GitHub (https://github.com/TheFiveHeads/Google-AI-Hackathon-Project/issues)
+Have questions or suggestions? Please let us know by submitting a new issue on GitHub (https://github.com/TheFiveHeads/Google-AI-Hackathon-Project/issues)
 
 ## Contributing
 

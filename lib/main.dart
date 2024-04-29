@@ -50,6 +50,7 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 154, 164, 59),
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,10 +82,11 @@ class HomePage extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(7),
+                    padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 154, 164, 59),
                       borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.black),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,14 +138,26 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 100),
             Center( // Center the button horizontally
-              child: ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black), // Added black border
+                  borderRadius: BorderRadius.circular(40), // Added border radius
                 ),
-                child: const Text('Be Cart-Conscious!', style: TextStyle(color: Colors.black, fontSize: 20,),),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 254, 249, 224)),
+                child: ElevatedButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SearchPage()),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 254, 249, 224)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0), // Adjust padding as needed
+                    child: const Text(
+                      'Be Cart-Conscious!',
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                  ),
                 ),
               ),
             ),

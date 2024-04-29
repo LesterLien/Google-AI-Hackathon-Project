@@ -100,9 +100,28 @@ class _FavoritesUserState extends State<FavoritesUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorites'),
+      appBar: PreferredSize(
+      preferredSize: Size.fromHeight(80),
+      child: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300, // Added border radius
+            border: Border.all(color: Colors.black), // Added border
+          ),
+          alignment: Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              'Favorites',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
       ),
+    ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _favoriteFoodDetails.isEmpty

@@ -56,22 +56,40 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
 
 @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: _getFavoriteState(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          isFavorite = snapshot.data!;
-        } else {
-          // Handle initial state (can be set to false)
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Food Details'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
+  return FutureBuilder<bool>(
+    future: _getFavoriteState(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        isFavorite = snapshot.data!;
+      } else {
+        // Handle initial state (can be set to false)
+      }
+      return Scaffold(
+        appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80), // Adjust height as needed
+        child: AppBar(
+          flexibleSpace: Column(
+            mainAxisAlignment: MainAxisAlignment.start, // Change to start
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300, // Added border radius
+                  border: Border.all(color: Colors.black), // Added border
+                ),
+                height: 100, // Adjust height as needed
+                alignment: Alignment.center,
+                child: Text(
+                  'Food Details',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
           ),
+        ),
+      ),
           body: FutureBuilder<Map<String, dynamic>>(
             future: fetchFoodDetails(),
             builder: (context, snapshot) {

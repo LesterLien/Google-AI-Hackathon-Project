@@ -32,17 +32,36 @@ class SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Homepage"),
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80), // Adjust height as needed
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300, // Grey box color
+              border: Border.all(color: Colors.black), // Black border // Border radius
+            ),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Homepage',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
       body: GestureDetector(

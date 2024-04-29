@@ -65,9 +65,28 @@ class _AnalysisPageState extends State<AnalysisPage> {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(
-      title: const Text('Food Analysis'),
+    appBar: PreferredSize(
+    preferredSize: Size.fromHeight(80),
+    child: AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300, // Added border radius
+          border: Border.all(color: Colors.black), // Added border
+        ),
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            'Food Analysis',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      ),
     ),
+  ),
     body: FutureBuilder<Map<String, dynamic>>(
       future: _analysisResult,
       builder: (context, snapshot) {
@@ -80,7 +99,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
               parseAnalysisData(snapshot.data!['analysis']);
 
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _buildAnalysisItems(analysisData),
@@ -121,10 +140,14 @@ Widget _buildAnalysisItem(String label, dynamic value) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
-        "$label: $displayValue",
+        label,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
       ),
       const SizedBox(height: 5), // Add some vertical spacing between label and value
+      Text(
+        displayValue,
+        style: const TextStyle(fontSize: 18),
+      ),
     ],
   );
 }

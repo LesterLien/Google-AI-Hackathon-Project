@@ -28,9 +28,27 @@ class LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: Text("Homepage"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300, // Added border radius
+              border: Border.all(color: Colors.black), // Added border
+            ),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Homepage',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
