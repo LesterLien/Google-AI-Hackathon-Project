@@ -66,7 +66,7 @@ class LoginState extends State<Login> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green),
+                    color: Color.fromARGB(255, 154, 164, 59)),
               ),
               SizedBox(height: 30),
               Row(
@@ -135,15 +135,15 @@ class LoginState extends State<Login> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.green),
+                    border: Border.all(color: Color.fromARGB(255, 154, 164, 59)),
                   ),
                   child: Center(
                     child: isSigning
-                        ? CircularProgressIndicator(color: Colors.black)
+                        ? CircularProgressIndicator(color: Color.fromARGB(255, 154, 164, 59))
                         : Text(
                             "Sign in",
                             style: TextStyle(
-                              color: Colors.green,
+                              color: Color.fromARGB(255, 154, 164, 59),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -41,7 +41,7 @@ class _InstructionPageState extends State<InstructionPage>{
           children: [
             const Text(
               'How to Use the App:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orange),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 154, 164, 59)),
             ),
             const SizedBox(height: 20), // Add space between title and list
             _buildInstructionListItem('Start by navigating to the search page and typing the name of a food item in the search bar.'),

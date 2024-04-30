@@ -80,7 +80,7 @@ class SignUpState extends State<SignUp> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                    color: Color.fromARGB(255, 154, 164, 59)),
               ),
               SizedBox(height: 30),
               Text(
@@ -138,7 +138,7 @@ class SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               GestureDetector(
                 onTap: signUp,
                 child: Container(
@@ -147,15 +147,15 @@ class SignUpState extends State<SignUp> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.orange),
+                    border: Border.all(color: Color.fromARGB(255, 154, 164, 59)),
                   ),
                   child: Center(
                     child: isSigningUp
-                        ? CircularProgressIndicator(color: Colors.orange)
+                        ? CircularProgressIndicator(color: Color.fromARGB(255, 154, 164, 59))
                         : Text(
                             "Sign Up",
                             style: TextStyle(
-                              color: Colors.orange,
+                              color: Color.fromARGB(255, 154, 164, 59),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
