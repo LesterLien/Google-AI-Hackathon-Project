@@ -11,13 +11,29 @@ class _InstructionPageState extends State<InstructionPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Instructions'),
+      appBar: PreferredSize(
+      preferredSize: Size.fromHeight(80), // Adjust height as needed
+      child: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300, // Added border radius
+            border: Border.all(color: Colors.black), // Added border
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'Instructions',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
       ),
+    ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -25,7 +41,7 @@ class _InstructionPageState extends State<InstructionPage>{
           children: [
             const Text(
               'How to Use the App:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.orange),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 154, 164, 59)),
             ),
             const SizedBox(height: 20), // Add space between title and list
             _buildInstructionListItem('Start by navigating to the search page and typing the name of a food item in the search bar.'),

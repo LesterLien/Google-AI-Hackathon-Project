@@ -68,6 +68,7 @@ flutter:
     - images/logo.png
     - images/favorite.png
     - images/unfavorite.png
+    - images/signbg.png
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

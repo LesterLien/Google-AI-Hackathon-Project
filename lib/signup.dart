@@ -28,21 +28,40 @@ class SignUpState extends State<SignUp> {
     passwordController.dispose();
     super.dispose();
   }
-
+  bool _isPasswordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Homepage"),
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80), // Adjust height as needed
+        child: AppBar(
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300, // Grey box color
+              border: Border.all(color: Colors.black), // Black border // Border radius
+            ),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Homepage',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
       body: GestureDetector(
@@ -61,7 +80,7 @@ class SignUpState extends State<SignUp> {
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange),
+                    color: Color.fromARGB(255, 154, 164, 59)),
               ),
               SizedBox(height: 30),
               Text(
@@ -69,24 +88,57 @@ class SignUpState extends State<SignUp> {
                 style: TextStyle(fontSize: 15, color: Colors.black),
               ),
               SizedBox(height: 5),
-              FormContainerWidget(
-                controller: usernameController,
+              TextFormField(
+                controller: usernameController, // Assign a TextEditingController
+                decoration: InputDecoration(
                 hintText: "Username",
-                isPasswordField: false,
+                prefixIcon: Icon(Icons.account_box),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0),
+                  ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Set border radius // Specify the gray color
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
-                controller: emailController,
-                hintText: "Email",
-                isPasswordField: false,
+              TextFormField(
+                controller: emailController, // Assign a TextEditingController
+                decoration: InputDecoration(
+                hintText: "Enter your email",
+                prefixIcon: Icon(Icons.email),
+                filled: true, // Set filled to true
+                fillColor: Colors.grey[250],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0),
+                  ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Set border radius // Specify the gray color
+                ),
               ),
               SizedBox(height: 10),
-              FormContainerWidget(
-                controller: passwordController,
-                hintText: "Password",
-                isPasswordField: true,
+              TextFormField(
+                controller: passwordController, // Assign a TextEditingController
+                obscureText: !_isPasswordVisible, // Toggle password visibility
+                decoration: InputDecoration(
+                  hintText: "Enter your password",
+                  prefixIcon: Icon(Icons.lock),
+                  filled: true,
+                  fillColor: Colors.grey[250],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  suffixIcon: IconButton(
+                    icon: _isPasswordVisible
+                        ? Icon(Icons.visibility)
+                        : Icon(Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible; // Toggle password visibility
+                      });
+                    },
+                  ),
+                ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               GestureDetector(
                 onTap: signUp,
                 child: Container(
@@ -95,15 +147,15 @@ class SignUpState extends State<SignUp> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.orange),
+                    border: Border.all(color: Color.fromARGB(255, 154, 164, 59)),
                   ),
                   child: Center(
                     child: isSigningUp
-                        ? CircularProgressIndicator(color: Colors.orange)
+                        ? CircularProgressIndicator(color: Color.fromARGB(255, 154, 164, 59))
                         : Text(
                             "Sign Up",
                             style: TextStyle(
-                              color: Colors.orange,
+                              color: Color.fromARGB(255, 154, 164, 59),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -137,7 +189,7 @@ class SignUpState extends State<SignUp> {
     );
   }
 
-  void signUp() async {
+   void signUp() async {
     setState(() {
       isSigningUp = true;
     });
@@ -160,3 +212,4 @@ class SignUpState extends State<SignUp> {
     }
   }
 }
+

@@ -54,7 +54,7 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
     await _saveFavoriteState(isFavorite);
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: _getFavoriteState(),
@@ -65,11 +65,29 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
           // Handle initial state (can be set to false)
         }
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Food Details'),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(80), // Adjust height as needed
+            child: AppBar(
+              flexibleSpace: Column(
+                mainAxisAlignment: MainAxisAlignment.start, // Change to start
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300, // Added border radius
+                      border: Border.all(color: Colors.black), // Added border
+                    ),
+                    height: 100, // Adjust height as needed
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Food Details',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           body: FutureBuilder<Map<String, dynamic>>(
@@ -83,61 +101,61 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
                 return ListView(
                   children: <Widget>[
                     ListTile(
-                      title: const Text('Item'),
+                      title: const Text('Item', style: TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text(snapshot.data!['brandName'] ?? 'N/A'),
                     ),
-                ListTile(
-                  title: const Text('Brand Owner'),
-                  subtitle: Text(snapshot.data!['brandOwner'] ?? 'N/A'),
-                ),
-                ListTile(
-                  title: const Text('Category'),
-                  subtitle:
-                      Text(snapshot.data!['brandedFoodCategory'] ?? 'N/A'),
-                ),
-                ListTile(
-                  title: const Text('Package Weight'),
-                  subtitle: Text(snapshot.data!['packageWeight'] ?? 'N/A'),
-                ),
-                ListTile(
-                  title: const Text('Not a Signficant Source of'),
-                  subtitle:
-                      Text(snapshot.data!['notaSignificantSourceOf'] ?? 'N/A'),
-                ),
-                ListTile(
-                  title: const Text('Ingredients'),
-                  subtitle: Text(snapshot.data!['ingredients'] ?? 'N/A'),
-                ),
-                ElevatedButton(
-                  // Button to navigate to AnalysisPage
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AnalysisPage(fdcId: widget.fdcId)),
-                    );
-                  },
-                  child: const Text('Analyze'),
-                ),
-                IconButton(
-                  icon: SizedBox(
-                    height: 24, // Adjust height as needed
-                    width: 24, // Adjust width as needed
-                    child: Image(
-                      image: AssetImage(isFavorite ? 'images/favorite.png' : 'images/unfavorite.png'),
+                    ListTile(
+                      title: const Text('Brand Owner', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(snapshot.data!['brandOwner'] ?? 'N/A'),
                     ),
-                  ),
-                  onPressed: toggleFavorite,
-                ),
-              ],
-            );
-          } else {
-            return const Center(child: Text('No data available'));
-            }
-          },
-        ),
-      );
-    },
+                    ListTile(
+                      title: const Text('Category', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle:
+                          Text(snapshot.data!['brandedFoodCategory'] ?? 'N/A'),
+                    ),
+                    ListTile(
+                      title: const Text('Package Weight', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(snapshot.data!['packageWeight'] ?? 'N/A'),
+                    ),
+                    ListTile(
+                      title: const Text('Not a Signficant Source of', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle:
+                          Text(snapshot.data!['notaSignificantSourceOf'] ?? 'N/A'),
+                    ),
+                    ListTile(
+                      title: const Text('Ingredients', style: TextStyle(fontWeight: FontWeight.bold)),
+                      subtitle: Text(snapshot.data!['ingredients'] ?? 'N/A'),
+                    ),
+                    ElevatedButton(
+                      // Button to navigate to AnalysisPage
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnalysisPage(fdcId: widget.fdcId)),
+                        );
+                      },
+                      child: const Text('Analyze'),
+                    ),
+                    IconButton(
+                      icon: SizedBox(
+                        height: 24, // Adjust height as needed
+                        width: 24, // Adjust width as needed
+                        child: Image(
+                          image: AssetImage(isFavorite ? 'images/favorite.png' : 'images/unfavorite.png'),
+                        ),
+                      ),
+                      onPressed: toggleFavorite,
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(child: Text('No data available'));
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

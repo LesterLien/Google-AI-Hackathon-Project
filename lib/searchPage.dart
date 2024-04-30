@@ -47,11 +47,28 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Foods'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: AppBar(
+          title: const Text(''), // Empty title
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              border: Border.all(color: Colors.black), // Added border
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              'Search Foods',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
         ),
       ),
       body: Column(

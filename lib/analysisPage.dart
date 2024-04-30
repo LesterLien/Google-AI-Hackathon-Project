@@ -64,65 +64,92 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Food Analysis'),
+  return Scaffold(
+    appBar: PreferredSize(
+    preferredSize: Size.fromHeight(80),
+    child: AppBar(
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300, // Added border radius
+          border: Border.all(color: Colors.black), // Added border
+        ),
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            'Food Analysis',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: _analysisResult,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error.toString()}'));
-          } else if (snapshot.hasData) {
-            // Use the parseAnalysisData function to convert the string to a Map
-            final Map<String, dynamic> analysisData =
-                parseAnalysisData(snapshot.data!['analysis']);
+    ),
+  ),
+    body: FutureBuilder<Map<String, dynamic>>(
+      future: _analysisResult,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error.toString()}'));
+        } else if (snapshot.hasData) {
+          final Map<String, dynamic> analysisData =
+              parseAnalysisData(snapshot.data!['analysis']);
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Brand: ${analysisData['Brand']}",
-                      style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                  const SizedBox(height: 10),
-                  Text("Ingredients: ${analysisData['Ingredients'].join(', ')}"),
-                  const SizedBox(height: 10),
-                  Text("Potential Allergens: ${analysisData['Potential Allergens']}"),
-                  const SizedBox(height: 10),
-                  Text("Positives: ${analysisData['Positive']}"),
-                  const SizedBox(height: 10),
-                  Text("Negatives: ${analysisData['Negatives']}"),
-                  const SizedBox(height: 10),
-                  Text("Considerations: ${analysisData['Considerations']}"),
-                  const SizedBox(height: 10),
-                  Text("Disclaimers: ${analysisData['Disclaimers']}"),
-                  const SizedBox(height: 10),
-                  Text("Vegan: ${analysisData['Vegan']}"),
-                  const SizedBox(height: 10),
-                  Text("Vegetarian: ${analysisData['Vegetarian']}"),
-                  const SizedBox(height: 10),
-                  Text("Gluten-Free: ${analysisData['Gluten-Free']}"),
-                  const SizedBox(height: 10),
-                  Text("Keto: ${analysisData['Keto']}"),
-                  const SizedBox(height: 10),
-                  Text("Considerations: ${analysisData['Considerations']}"),
-                  const SizedBox(height: 10),
-                  Text("Diabetic: ${analysisData['Diabetic']}"),
-                  const SizedBox(height: 10),
-                  Text("Overall Analysis: ${analysisData['Paragraph1']}. " "${analysisData['Paragraph2']}"),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
-      ),
-    );
+          return SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _buildAnalysisItems(analysisData),
+            ),
+          );
+        } else {
+          return const Center(child: Text('No data available'));
+        }
+      },
+    ),
+  );
+}
+
+List<Widget> _buildAnalysisItems(Map<String, dynamic> analysisData) {
+  return [
+    _buildAnalysisItem("Brand", analysisData['Brand']),
+    _buildAnalysisItem("Ingredients", analysisData['Ingredients'].join(', ')),
+    _buildAnalysisItem("Potential Allergens", analysisData['Potential Allergens']),
+    _buildAnalysisItem("Positives", analysisData['Positive']),
+    _buildAnalysisItem("Negatives", analysisData['Negatives']),
+    _buildAnalysisItem("Considerations", analysisData['Considerations']),
+    _buildAnalysisItem("Disclaimers", analysisData['Disclaimers']),
+    _buildAnalysisItem("Vegan", analysisData['Vegan']),
+    _buildAnalysisItem("Vegetarian", analysisData['Vegetarian']),
+    _buildAnalysisItem("Gluten-Free", analysisData['Gluten-Free']),
+    _buildAnalysisItem("Keto", analysisData['Keto']),
+    _buildAnalysisItem("Diabetic", analysisData['Diabetic']),
+    _buildAnalysisItem("Overall Analysis", "${analysisData['Paragraph1']}. ${analysisData['Paragraph2']}"),
+  ].expand((widget) => [widget, const SizedBox(height: 15)]).toList(); // Add some spacing between items
+}
+
+Widget _buildAnalysisItem(String label, dynamic value) {
+  String displayValue = value.toString();
+  if (value is List) {
+    displayValue = value.join(', ');
   }
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      ),
+      const SizedBox(height: 5), // Add some vertical spacing between label and value
+      Text(
+        displayValue,
+        style: const TextStyle(fontSize: 18),
+      ),
+    ],
+  );
+}
+
 }
